@@ -2,6 +2,7 @@ import os
 import textwrap
 import time
 import docker
+
 client = docker.from_env()
 
 docker_config = {
@@ -12,13 +13,12 @@ docker_config = {
     'tty': True,
     # 'name': 'C1',
     'volumes': {
-        "source_codes": {
+        '/volum': {
             'bind': '/app/vol',
             'mode': 'rw'
         }
     }
 }
-
 
 code = """
 def add_numbers(a, b):
@@ -32,15 +32,16 @@ try:
     with open('userFile.py', 'w') as file:
         file.write(wrapped_code)
 
-
-    os.system('docker cp userFile.py dummyHelp:/app/vol/userFile.py')
     # os.system('docker cp authorFile.py dummyHelp:/app/vol/authorFile.py')
     # Copy in the volume
-    container = client.containers.run(**docker_config)
+    container = client.containers.create(**docker_config)
     # container = client.containers.get('C1')
     print('Container: ', container)
+    os.system(f'docker cp userFile.py {container.name}:/app/vol/userFile.py')
 
-    print(container.logs())
+
+    container.start()
+
     for line in container.logs(stream=True):
         print(line.strip())
 except Exception as e:
