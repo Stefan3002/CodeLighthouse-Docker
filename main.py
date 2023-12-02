@@ -17,12 +17,12 @@ docker_config = {
             'bind': '/app/vol',
             'mode': 'rw'
         }
-    }
+    },
 }
 
 code = """
-def add_numbers(a, b):
-    return a + b
+def user_function(a, b):
+    return a + b + x
 """
 container = None
 try:
@@ -41,9 +41,15 @@ try:
 
 
     container.start()
+    logs = container.logs(stdout=True, stderr=True, stream=True)
+    log_bytes = b''
+    for line in logs:
+        log_bytes += line
 
-    for line in container.logs(stream=True):
-        print(line.strip())
+    logs_str = log_bytes.decode('utf-8')
+
+    print(logs_str)
+
 except Exception as e:
     print('NONO!', e)
 finally:

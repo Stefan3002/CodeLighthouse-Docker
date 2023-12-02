@@ -2,6 +2,6 @@ FROM python
 
 WORKDIR /app
 
-COPY . /app
+COPY './assertions.py' /app
 
-CMD ["python", "assertions.py"]
+CMD ["python", "-m", "unittest", "assertions.py"]

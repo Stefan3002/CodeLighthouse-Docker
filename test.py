@@ -1,11 +1,11 @@
 import unittest
 
-from vol.userFile import user_function
-from vol.authorFile import true_function
-from vol.randomFile import random_function
+random_tests = [(1, 2), (4, 7)]
 
-
-random_tests = random_function()
+def user_function(inputs):
+    return inputs[0] * inputs[1]
+def true_function(inputs):
+    return inputs[0] * inputs[1]
 class TestRandomInputs(unittest.TestCase):
     def testing(self):
         for test in random_tests:
